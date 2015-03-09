@@ -217,3 +217,37 @@ Minify into `dist/`:
 Run tests:
 
 	gulp test
+
+## License
+
+I’ve always loved the GPL for its “viral” nature, its ability to force software interoperating with GPL-licensed parts to become “infected” as well but for some reason I’ve never put my own software under the GPL, so I’m trying something new with this project. Since the GPL (unlike the LGPL) has very strict rules about linking, any software using Wok.js will fall under the GPL as well. Most likely this will mean people will want to switch to a different library. If that’s the case, it’s fine with me. If you seek to use Wok.js under a different license, feel free to contact me directly, maybe we can work something out. For contributors this means all contributions you make will be GPL but copyright be transferred to me in order for me to re-license to interested parties.
+
+Copyright (C) 2015 Raphael Schweikert
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA

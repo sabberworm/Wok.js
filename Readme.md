@@ -205,9 +205,9 @@ Alternatively, plugins can be assigned to the global `Wok. plugins` object and t
 	wok.use("debug"); // Same as wok.use("debug, Wok.plugins.debug);
 	wok.init();
 
-To alias an existing plugin, use two strings
+To alias an existing plugin, use two strings. This way, the same plugin can be used multiple times on the same element (or using a nicer name):
 
-	wok.use("test", function() …)
+	wok.use("test", function() …);
 	wok.use("test2", "test");
 
 ## Installation

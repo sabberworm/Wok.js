@@ -1,5 +1,5 @@
 {
-  "name": "Wok",
+  "name": "wok",
   "version": "1.0.0",
   "description": "Pipes for the web",
   "main": "src/Wok.js",
@@ -29,5 +29,13 @@
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-safari-launcher": "^0.1.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sabberworm/Wok.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sabberworm/Wok.js/issues"
+  },
+  "homepage": "https://github.com/sabberworm/Wok.js"
 }

@@ -58,7 +58,7 @@ The globally-exported `window.Wok` function is a constructor using which individ
 		}, false);
 	})();
 
-The convention is for one Wok.js instance to exist on window.wok so third-party plugins can register on that. You only have to call `init` if you have any plugins to initialize. Currently calling `init` multiple times with the same DOM node (or parts of the same tree), will initialize the plugins multiple times, possibly leading to unexpected results. This will likely change in a future release.
+You only have to call `init` if you have any plugins to initialize. Currently calling `init` multiple times with the same DOM node (or parts of the same tree), will initialize the plugins multiple times, possibly leading to unexpected results. This will likely change in a future release.
 
 ### Configuration
 
@@ -196,6 +196,19 @@ You can now use this plugin as follows:
 	</textarea>
 
 Which will configure the separator to be `"\n-------------\n"`.
+
+Alternatively, plugins can be assigned to the global `Wok. plugins` object and then registered using just their name only. This is the way third-party plugins are registered:
+
+	Wok.plugins.debug = function debug(element, separator) {};
+	…
+	wok = new Wok();
+	wok.use("debug"); // Same as wok.use("debug, Wok.plugins.debug);
+	wok.init();
+
+To alias an existing plugin, use two strings. This way, the same plugin can be used multiple times on the same element (or using a nicer name):
+
+	wok.use("test", function() …);
+	wok.use("test2", "test");
 
 ## Installation
 

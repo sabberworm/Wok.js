@@ -18,6 +18,17 @@
 	}
 
 	Wok.prototype.use = function(name, plugin) {
+		var originalName = name;
+		if(!plugin) {
+			plugin = Wok.plugins[name];
+		}
+		if(typeof plugin === 'string') {
+			originalName = plugin;
+			plugin = this.plugins[plugin];
+		}
+		if(!plugin) {
+			throw new Error('Plugin '+originalName+' not known to Wok.');
+		}
 		this.plugins[name] = plugin;
 	};
 	
@@ -193,6 +204,8 @@
 		}
 		return wok.source.apply(this, args);
 	};
+
+	Wok.plugins = {};
 
 	window.Wok = Wok;
 })(window.JSON);

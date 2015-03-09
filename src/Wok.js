@@ -138,14 +138,28 @@
 		return this._getStage(inputPipeName, outputPipeName);
 	};
 	
-	Wok.prototype.provide = function(pipeName, source, override) {
+	/**
+	 * The most fundamental part of a Wok.js pipe is the provider,
+	 * the function that listens to request on a pipe (and hopefully responds with `wok.render`).
+	 * There is only one provider per pipe.
+	 * @param provider will be the function that is called whenever the configuration for this pipe changes and
+	 *                 indicates to the source that it should call `wok.render` with updated data.
+	 * @param replace If you want to call `wok.provide` multiple times for the same pipe in
+	 *                order to replace the previous provider, set the this to `true`.
+	 */
+	Wok.prototype.provide = function(pipeName, source, replace) {
 		var wok = this._getPipe(pipeName);
-		if(wok.source && !override) {
-			throw new Error('Cannot override defined pipe “'+pipeName+'”’s source');
+		if(wok.source && !replace) {
+			throw new Error('Cannot replace defined pipe “'+pipeName+'”’s source');
 		}
 		wok.source = source;
 	};
 
+	/**
+	 * Use `wok.subscribe` to register a function that displays data.
+	 * Whenever a pipe gets rendered, the `subscriber` gets called with the updated data.
+	 * The idea is for the subscriber to either display the data or pass a modified version on to a different pipe.
+	 */
 	Wok.prototype.subscribe = function(pipeName, destination) {
 		var wok = this._getPipe(pipeName);
 		wok.destinations.push(destination);
@@ -166,7 +180,7 @@
 	};
 
 	/**
-	 * Requests data from a pipe. “options” are passed along to the source
+	 * Requests data from a pipe. Configuration options are passed along to the source
 	 */
 	Wok.prototype.request = function(pipeName, options) {
 		var wok = this._getPipe(pipeName);

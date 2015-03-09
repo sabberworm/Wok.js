@@ -197,7 +197,7 @@ You can now use this plugin as follows:
 
 Which will configure the separator to be `"\n-------------\n"`.
 
-Alternatively, plugins can be assigned to the global `Wok. plugins` object and then registered using just their name only. This is the way third-party plugins are registered:
+Alternatively, plugins can be assigned to the global `Wok.plugins` object and then registered using just their name only. This is the way third-party plugins are registered:
 
 	Wok.plugins.debug = function debug(element, separator) {};
 	…

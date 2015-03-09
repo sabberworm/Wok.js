@@ -1,4 +1,4 @@
-(function() {
+(function(JSON) {
 	'use strict';
 
 	function Wok(config) {
@@ -15,7 +15,7 @@
 		this.plugins = {};
 
 		this.debug = false;
-	};
+	}
 
 	Wok.prototype.use = function(name, plugin) {
 		this.plugins[name] = plugin;
@@ -30,8 +30,9 @@
 			}
 		}
 	};
-	
+
 	Wok.prototype._initPlugin = function(plugin, name, element) {
+		// jshint maxstatements: false
 		var attr = (element.getAttribute('data-'+this.config.pluginPrefix+name)||'').trim().split('/');
 		var input = attr.shift();
 		var output = attr.shift();
@@ -41,7 +42,7 @@
 		if(input) {
 			stage.input = [input, function() {
 				return pluginControls.render.apply(this, arguments);
-			}]
+			}];
 			// Set the input function’s display name to make debugging easier
 			stage.input[1].displayName = name+'/'+input+'/input';
 			stage.inputName = input;
@@ -49,7 +50,7 @@
 		if(output) {
 			stage.output = [output, function() {
 				return pluginControls.request.apply(this, arguments);
-			}]
+			}];
 			// Set the output function’s display name to make debugging easier
 			stage.output[1].displayName = name+'/'+output+'/output';
 			stage.outputName = output;
@@ -61,7 +62,7 @@
 		pluginControls = plugin.apply(stage, args);
 
 		if(!pluginControls) {
-			throw new Error("Wok plugin "+name+" did not return controls");
+			throw new Error('Wok plugin '+name+' did not return controls');
 		}
 
 		var requestImmediately, renderImmediately;
@@ -76,10 +77,10 @@
 
 		// Sanity-check pluginControls
 		if(input && !('render' in pluginControls)) {
-			throw new Error("Wok plugin “"+name+"” not meant to be used with input pipes");
+			throw new Error('Wok plugin “'+name+'” not meant to be used with input pipes');
 		}
 		if(output && !('request' in pluginControls)) {
-			throw new Error("Wok plugin “"+name+"” not meant to be used with output pipes");
+			throw new Error('Wok plugin “'+name+'” not meant to be used with output pipes');
 		}
 
 		if(requestImmediately) {
@@ -169,6 +170,7 @@
 	 * Renders a pipe by updating all its destinations
 	 */
 	Wok.prototype.render = function(pipeName, data) {
+		// jshint unused: false
 		var wok = this._getPipe(pipeName);
 		var args = Array.prototype.slice.call(arguments, 1);
 		if(this.debug) {
@@ -183,13 +185,14 @@
 	 * Requests data from a pipe. Configuration options are passed along to the source
 	 */
 	Wok.prototype.request = function(pipeName, options) {
+		// jshint unused: false
 		var wok = this._getPipe(pipeName);
 		var args = Array.prototype.slice.call(arguments, 1);
 		if(this.debug) {
 			console.debug('Wok requesting '+pipeName+'', args, wok.source);
 		}
-		return wok.source.apply(this, args)
+		return wok.source.apply(this, args);
 	};
 
 	window.Wok = Wok;
-})();
+})(window.JSON);

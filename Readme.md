@@ -114,7 +114,7 @@ The first argument to the function is always the DOM node on which the data attr
 
 ### Low-level API: `provide` and `subscribe`, `request` and `render`
 
-The most fundamental part of a Wok.js pipe is the provider, the function that listens to request on a pipe (and hopefully responds with `wok.render`). There is only one provider per pipe. To register a provider for a pipe, use `wok.provide`:
+The most fundamental part of a Wok.js pipe is the provider, the function that listens to request on a pipe (and hopefully responds with `wok.render`). To register a provider for a pipe, use `wok.provide`:
 
 	wok.provide(pipeName, function provider(configuration…) {}, replace);
 

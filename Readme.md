@@ -1,6 +1,6 @@
 # Wok.js: Pipes for the web
 
-Wok.js is a small, dependency-free (IE8+) library for connecting interdependent components or modules (henceforth called “stages”) on your web-site through pipes.
+Wok.js is a tiny, dependency-free (IE8+) library for connecting interdependent components or modules (henceforth called “stages”) on your web-site through pipes.
 
 ## How does it work?
 

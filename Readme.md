@@ -12,7 +12,7 @@ It’s probably the same concept as [connectors in TerrificJS modules](http://te
 
 ### Is that all?
 
-On the basic level, yes. However, to unify the concept of Wok.js pipes with the DOM, you can register plugins. Plugins, as they say, is where the magic happens: they use the Wok.js API to provide automatic sources and destinations for pipes that are configured in DOM nodes using `data-` attributes. Plugins are what makes Wok.js a compelling choice to see how data flows “through the DOM” (though it does not actually do that) just from looking at the HTML. Wok.js plugins that display data (only have input pipes) work great with templates and I’ve had lots of fun using React with those (then again, almost anything works great with React).
+On the basic level, yes. However, to unify the concept of Wok.js pipes with the DOM, you can register plugins. Plugins are where, as they say, the magic happens: they use the Wok.js API to provide automatic sources and destinations for pipes that are configured in DOM nodes using `data-` attributes. Plugins are what makes Wok.js a compelling choice to see how data flows “through the DOM” (though it does not actually do that) just from looking at the HTML. Wok.js plugins that display data (only have input pipes) work great with templates and I’ve had lots of fun using React with those (then again, almost anything works great with React).
 
 ## Nomenclature
 
@@ -146,7 +146,7 @@ Unifying these concepts of subscribers and providers is the “stage”. A stage
 
 	wok.register({
 		input: [pipeName, subscriber],
-		outpu: [pipeName, provider]
+		output: [pipeName, provider]
 	});
 
 This will return an object (the “stage”) with the following properties:

@@ -10,7 +10,7 @@ Let’s say you have data from an XMLHttpRequest that you want to let the user f
 
 ### Is that all?
 
-On the basic level, yes. However, to unify the concept of Wok.js pipes with the DOM, you can register plugins. Plugins, as they say, is where the magic happens: they use the Wok.js API to provide automatic sources and destinations for pipes that are configured in DOM nodes using `data-` attributes. Plugins are what makes Wok.js a compelling choice to see how data flows “through the DOM” (though it does not actually do that) just from looking at the HTML.
+On the basic level, yes. However, to unify the concept of Wok.js pipes with the DOM, you can register plugins. Plugins, as they say, is where the magic happens: they use the Wok.js API to provide automatic sources and destinations for pipes that are configured in DOM nodes using `data-` attributes. Plugins are what makes Wok.js a compelling choice to see how data flows “through the DOM” (though it does not actually do that) just from looking at the HTML. Wok.js plugins that display data (only have input pipes) work great with templates and I’ve had lots of fun using React with those (then again, almost anything works great with React).
 
 ## Nomenclature
 

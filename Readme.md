@@ -192,7 +192,7 @@ Let’s show an example plugin that dumps the data on a pipe into a DOM element:
 				return;
 			}
 			// Request from the source.
-			// Remember,the format of the configuration is up to the implementation.
+			// Remember, the format of the configuration is up to the implementation.
 			// For this example, we simply chose two parameters.
 			// The pipe’s provider will have to support this format.
 			controls.request('character', String.fromCharCode(event.charCode));

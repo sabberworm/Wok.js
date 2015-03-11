@@ -170,7 +170,7 @@ The `plugin` function is at the heart of this: it gets invoked with the `this` o
 		render: function render(data…)              // If the plugin has an input pipe, this callback should render the data on it
 	}
 
-Either `render` (or `request`) can be omitted, making this plugin input-only (or output-only). If the plugin only has one pipe, the unused property can also be set to a boolean to request or render the pipe as soon as possible (but without any data or configuration). This is mostly used from the bottom up so that input-only plugins add `render: true` to this object in order to get data as soon as the Wok.js instance is ready.
+Either `render` (or `request`) can be omitted, making this plugin input-only (or output-only). If the plugin only has one pipe, the unused property can also be set to a boolean to request or render the pipe as soon as possible (but without any data or configuration). This is mostly used from the bottom up so that input-only plugins add `request: true` to this object in order to get data as soon as the Wok.js instance is ready.
 
 Let’s show an example plugin that dumps the data on a pipe into a DOM element:
 
@@ -186,6 +186,19 @@ Let’s show an example plugin that dumps the data on a pipe into a DOM element:
 		function render(data) {
 			element.textContent += separator+JSON.stringify(data);
 		}
+		
+		element.addEventListener('keypress', function(event) {
+			if(event.charCode === 0) {
+				return;
+			}
+			// Request from the source.
+			// Remember,the format of the configuration is up to the implementation.
+			// For this example, we simply chose two parameters.
+			// The pipe’s provider will have to support this format.
+			controls.request('character', String.fromCharCode(event.charCode));
+			// Do not insert the typed character
+			event.preventDefault();
+		}, false);
 
 		return {
 			render: render

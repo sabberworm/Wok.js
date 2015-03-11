@@ -60,7 +60,7 @@ The globally-exported `window.Wok` function is a constructor using which individ
 		}, false);
 	})();
 
-You only have to call `init` if you have any plugins to initialize. Currently calling `init` multiple times with the same DOM node (or parts of the same tree), will initialize the plugins multiple times, possibly leading to unexpected results. This will likely change in a future release.
+You only have to call `init` if you have any plugins to initialize. Currently, calling `init` multiple times with the same DOM node (or parts of the same tree), will initialize the plugins multiple times, possibly leading to unexpected results. This will likely change in a future release.
 
 ### Configuration
 

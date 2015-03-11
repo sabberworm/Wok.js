@@ -163,7 +163,7 @@ Like I said earlier: plugins are a means of unifying the concepts of pipes with 
 
 	wok.use(pluginName, function plugin(element, options…) {});
 
-The `plugin` function is at the heart of this: it gets invoked with the `this` object pointing to the stage that is configured using the pipe names found in the DOM element’s data-attribute “data-wok-pluginName” (where the “wok-” prefix is configurable) and should must return an object with callbacks:
+The `plugin` function is at the heart of this: it gets invoked with the `this` object pointing to the stage that is configured using the pipe names found in the DOM element’s data-attribute “data-wok-pluginName” (where the “wok-” prefix is configurable) and must return an object with callbacks:
 
 	{
 		request: function request(configuration…),  // If the plugin has an output pipe, this callback should provide the data for it

@@ -91,7 +91,7 @@
 			expect(test).toHaveBeenCalled();
 		});
 
-		it('input-only plugin does not accept output pipes', function() {
+		it('does not accept output pipes if input-only', function() {
 			wok.use('inputOnly', function() {
 				return {
 					render: function() {}
@@ -104,7 +104,7 @@
 			}).toThrowError('Wok plugin “inputOnly” not meant to be used with output pipes');
 		});
 
-		it('output-only plugin does not accept input pipes', function() {
+		it('does not accept input pipes if output-only', function() {
 			wok.use('outputOnly', function() {
 				return {
 					request: function() {}

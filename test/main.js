@@ -76,17 +76,45 @@
 		});
 
 		it('knows its pipes', function() {
-			wok.use('test', function() {
+			var test = jasmine.createSpy('test').and.callFake(function() {
 				expect(this.inputName).toBe('inputPipe');
 				expect(this.outputName).toBe('outputPipe');
 				return {
 					render: function() {},
 					request: function() {}
-				}
+				};
 			});
+			wok.use('test', test);
 			var element = document.createElement('div');
 			element.innerHTML = '<div data-wok-test="inputPipe/outputPipe"></div>';
 			wok.init(element);
+			expect(test).toHaveBeenCalled();
+		});
+
+		it('input-only plugin does not accept output pipes', function() {
+			wok.use('inputOnly', function() {
+				return {
+					render: function() {}
+				};
+			});
+			var element = document.createElement('div');
+			element.innerHTML = '<div data-wok-inputOnly="inputPipe/outputPipe"></div>';
+			expect(function() {
+				wok.init(element);
+			}).toThrowError('Wok plugin “inputOnly” not meant to be used with output pipes');
+		});
+
+		it('output-only plugin does not accept input pipes', function() {
+			wok.use('outputOnly', function() {
+				return {
+					request: function() {}
+				};
+			});
+			var element = document.createElement('div');
+			element.innerHTML = '<div data-wok-outputOnly="inputPipe/outputPipe"></div>';
+			expect(function() {
+				wok.init(element);
+			}).toThrowError('Wok plugin “outputOnly” not meant to be used with input pipes');
 		});
 	});
 })(window.jasmine, window.Wok);

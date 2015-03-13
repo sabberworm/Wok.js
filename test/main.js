@@ -74,5 +74,19 @@
 			expect(test1).toHaveBeenCalledWith(divs[0]);
 			expect(test1).toHaveBeenCalledWith(divs[1], 1);
 		});
+
+		it('knows its pipes', function() {
+			wok.use('test', function() {
+				expect(this.inputName).toBe('inputPipe');
+				expect(this.outputName).toBe('outputPipe');
+				return {
+					render: function() {},
+					request: function() {}
+				}
+			});
+			var element = document.createElement('div');
+			element.innerHTML = '<div data-wok-test="inputPipe/outputPipe"></div>';
+			wok.init(element);
+		});
 	});
 })(window.jasmine, window.Wok);

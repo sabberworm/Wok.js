@@ -56,7 +56,6 @@
 			}];
 			// Set the input function’s display name to make debugging easier
 			stage.input[1].displayName = name+'/'+input+'/input';
-			stage.inputName = input;
 		}
 		if(output) {
 			stage.output = [output, function() {
@@ -64,10 +63,11 @@
 			}];
 			// Set the output function’s display name to make debugging easier
 			stage.output[1].displayName = name+'/'+output+'/output';
-			stage.outputName = output;
 		}
 
 		stage = this.register(stage);
+		stage.inputName = input || undefined;
+		stage.outputName = output || undefined;
 		var args = JSON.parse('['+attr.join('/')+']');
 		args.unshift(element);
 		pluginControls = plugin.apply(stage, args);

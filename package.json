@@ -1,6 +1,6 @@
 {
   "name": "wok",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Pipes for the web",
   "main": "src/Wok.js",
   "scripts": {

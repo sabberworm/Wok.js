@@ -1,6 +1,17 @@
 (function(JSON) {
 	'use strict';
 
+	if(!Function.prototype.bind) {
+		Function.prototype.bind = function bind(context) {
+			var __method = this;
+			var __arguments = [].slice.call(arguments).slice(bind.length);
+			return function() {
+				var args = __arguments.concat([].slice.call(arguments));
+				return __method.apply(context, args);
+			};
+		};
+	}
+
 	function Wok(config) {
 		this.config = {
 			pluginClass: 'wok-',

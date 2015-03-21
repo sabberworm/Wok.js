@@ -4,7 +4,7 @@
   "description": "Pipes for the web",
   "main": "src/Wok.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "./node_modules/gulp/bin/gulp.js test"
   },
   "keywords": [
     "frontend"

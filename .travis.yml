@@ -1,10 +1,9 @@
 language: node_js
 node_js:
   - "stable"
-  - "0.12"
-  - "0.11"
-  - "0.10"
-  - "0.8"
-  - "0.6"
-  - "iojs"
-  - "iojs-v1.0.4" 
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+env:
+  - KARMA_BROWSER=Firefox
+  - KARMA_BROWSER=PhantomJS

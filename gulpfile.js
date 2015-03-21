@@ -21,10 +21,14 @@ gulp.task('check', function() {
 });
 
 gulp.task('test', ['check'], function (done) {
-	karma.start({
+	var conf = {
 		configFile: __dirname + '/karma.conf.js',
 		singleRun: true
-	}, done);
+	};
+	if('KARMA_BROWSER' in process.env) {
+		conf.browsers = [process.env.KARMA_BROWSER];
+	}
+	karma.start(conf, done);
 });
 
 gulp.task('minify', ['check'], function() {

@@ -42,12 +42,14 @@
 		}
 		this.plugins[name] = plugin;
 	};
-	
+
 	Wok.prototype.init = function(element) {
 		for(var name in this.plugins) {
 			var plugin = this.plugins[name];
 			var elements = element.querySelectorAll('[data-'+this.config.pluginPrefix+name+']');
 			for(var i=0;i<elements.length;i++) {
+				// Fixme: init input-only plugins before in-out,
+				// and these before output plugins, instead of using DOM order.
 				this._initPlugin(plugin, name, elements[i]);
 			}
 		}
@@ -59,10 +61,17 @@
 		var input = attr.shift();
 		var output = attr.shift();
 
+		var requestImmediately, renderImmediately;
+
 		var pluginControls;
 		var stage = {};
 		if(input) {
 			stage.input = [input, function() {
+				if(!pluginControls) {
+					// TODO: Is this correct. It works. But is the logic sound?
+					requestImmediately = true;
+					return;
+				}
 				return pluginControls.render.apply(this, arguments);
 			}];
 			// Set the input function’s display name to make debugging easier
@@ -70,6 +79,11 @@
 		}
 		if(output) {
 			stage.output = [output, function() {
+				if(!pluginControls) {
+					// TODO: Is this correct. It works. But is the logic sound?
+					renderImmediately = true;
+					return;
+				}
 				return pluginControls.request.apply(this, arguments);
 			}];
 			// Set the output function’s display name to make debugging easier
@@ -87,7 +101,6 @@
 			throw new Error('Wok plugin '+name+' did not return controls');
 		}
 
-		var requestImmediately, renderImmediately;
 		if(pluginControls.request === true) {
 			requestImmediately = true;
 			delete pluginControls.request;
@@ -116,7 +129,7 @@
 			element.className += ' '+this.config.pluginClass+name;
 		}
 	};
-	
+
 	/**
 	 * Returns the complete defintion of a pipe
 	 */
@@ -160,7 +173,7 @@
 		}
 		return this._getStage(inputPipeName, outputPipeName);
 	};
-	
+
 	/**
 	 * The most fundamental part of a Wok.js pipe is the provider,
 	 * the function that listens to request on a pipe (and hopefully responds with `wok.render`).
@@ -187,7 +200,7 @@
 		var wok = this._getPipe(pipeName);
 		wok.destinations.push(destination);
 	};
-	
+
 	/**
 	 * Renders a pipe by updating all its destinations
 	 */

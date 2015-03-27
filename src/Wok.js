@@ -1,17 +1,6 @@
 (function(JSON) {
 	'use strict';
 
-	if(!Function.prototype.bind) {
-		Function.prototype.bind = function bind(context) {
-			var __method = this;
-			var __arguments = [].slice.call(arguments).slice(bind.length);
-			return function() {
-				var args = __arguments.concat([].slice.call(arguments));
-				return __method.apply(context, args);
-			};
-		};
-	}
-
 	function Wok(config) {
 		this.config = {
 			pluginClass: 'wok-',
@@ -48,6 +37,8 @@
 			var plugin = this.plugins[name];
 			var elements = element.querySelectorAll('[data-'+this.config.pluginPrefix+name+']');
 			for(var i=0;i<elements.length;i++) {
+				// Fixme: init input-only plugins before in-out,
+				// and these before output plugins, instead of using DOM order.
 				this._initPlugin(plugin, name, elements[i]);
 			}
 		}
@@ -59,10 +50,17 @@
 		var input = attr.shift();
 		var output = attr.shift();
 
+		var requestImmediately, renderImmediately;
+
 		var pluginControls;
 		var stage = {};
 		if(input) {
 			stage.input = [input, function() {
+				if(!pluginControls) {
+					// TODO: Is this correct. It works. But is the logic sound?
+					requestImmediately = true;
+					return;
+				}
 				return pluginControls.render.apply(this, arguments);
 			}];
 			// Set the input function’s display name to make debugging easier
@@ -70,6 +68,11 @@
 		}
 		if(output) {
 			stage.output = [output, function() {
+				if(!pluginControls) {
+					// TODO: Is this correct. It works. But is the logic sound?
+					renderImmediately = true;
+					return;
+				}
 				return pluginControls.request.apply(this, arguments);
 			}];
 			// Set the output function’s display name to make debugging easier
@@ -87,7 +90,6 @@
 			throw new Error('Wok plugin '+name+' did not return controls');
 		}
 
-		var requestImmediately, renderImmediately;
 		if(pluginControls.request === true) {
 			requestImmediately = true;
 			delete pluginControls.request;

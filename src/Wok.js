@@ -1,6 +1,17 @@
 (function(JSON) {
 	'use strict';
 
+	if(!Function.prototype.bind) {
+		Function.prototype.bind = function bind(context) {
+			var __method = this;
+			var __arguments = [].slice.call(arguments).slice(bind.length);
+			return function() {
+				var args = __arguments.concat([].slice.call(arguments));
+				return __method.apply(context, args);
+			};
+		};
+	}
+
 	function Wok(config) {
 		this.config = {
 			pluginClass: 'wok-',
@@ -31,7 +42,7 @@
 		}
 		this.plugins[name] = plugin;
 	};
-	
+
 	Wok.prototype.init = function(element) {
 		for(var name in this.plugins) {
 			var plugin = this.plugins[name];
@@ -118,7 +129,7 @@
 			element.className += ' '+this.config.pluginClass+name;
 		}
 	};
-	
+
 	/**
 	 * Returns the complete defintion of a pipe
 	 */
@@ -162,7 +173,7 @@
 		}
 		return this._getStage(inputPipeName, outputPipeName);
 	};
-	
+
 	/**
 	 * The most fundamental part of a Wok.js pipe is the provider,
 	 * the function that listens to request on a pipe (and hopefully responds with `wok.render`).
@@ -189,7 +200,7 @@
 		var wok = this._getPipe(pipeName);
 		wok.destinations.push(destination);
 	};
-	
+
 	/**
 	 * Renders a pipe by updating all its destinations
 	 */

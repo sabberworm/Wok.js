@@ -1,4 +1,4 @@
-# Wok.js: Pipes for the web
+# Wok.js: Pipes for the web [![Build status](https://api.travis-ci.org/sabberworm/Wok.js.svg)](https://travis-ci.org/sabberworm/Wok.js)
 
 Wok.js is a tiny, dependency-free (IE8+) library for connecting interdependent components or modules (henceforth called “stages”) on your web-site through pipes.
 

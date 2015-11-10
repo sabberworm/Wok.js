@@ -55,8 +55,9 @@ The globally-exported `window.Wok` function is a constructor using which individ
 		wok.debug = true;
 	}
 	// Register plugins between now and when wok.init is called
+	…
 	document.addEventListener('DOMContentLoaded', function() {
-		// Search the entire document for uses of the plugins registered plugins
+		// Search the entire document for uses of the plugins we just registered
 		wok.init(document.documentElement);
 	}, false);
 })();

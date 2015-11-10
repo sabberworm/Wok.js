@@ -70,7 +70,7 @@ The call to `new Wok()` takes as optional argument an object of options. The fol
 
 #### pluginClass
 
-Defaults to `"wok-"`. Each element registered with a plugin gets the name of that plugin prefixed by this option added to the list of class names. For example, if an element uses the plugin `source` and this option is `"wok-"`, the element gets a class name of “wok-source”.
+Defaults to `"wok-"`. Each element registered with a plugin gets the name of that plugin prefixed by this option added to the list of class names. For example, if an element uses the plugin `source` and this option is `"wok-"`, the element gets a class name of “wok-source”. Use `null` for the pluginClass to avoid outputting class names.
 
 #### pluginPrefix
 

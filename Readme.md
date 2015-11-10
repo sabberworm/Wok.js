@@ -46,20 +46,21 @@ In the example above, the XMLHttpRequest would not have an input but have an out
 
 The globally-exported `window.Wok` function is a constructor using which individual Wok.js instances (the documentation uses `wok` as opposed to `Wok` to refer to these instances) can be created. You can have as many wok instances as you like and they can each be bound to some or all or no parts of the DOM for use with plugins.
 
-	(function() {
-		// A global Wok instance
-		var wok = window.wok = new Wok();
-		// Optional: turn on debug output
-		if(document.location.hash === '#debug') {
-			wok.debug = true;
-		}
-		// Register plugins between now and when wok.init is called
-		document.addEventListener('DOMContentLoaded', function() {
-			// Search the entire document for uses of the plugins registered plugins
-			wok.init(document.documentElement);
-		}, false);
-	})();
-
+```javascript
+(function() {
+	// A global Wok instance
+	var wok = window.wok = new Wok();
+	// Optional: turn on debug output
+	if(document.location.hash === '#debug') {
+		wok.debug = true;
+	}
+	// Register plugins between now and when wok.init is called
+	document.addEventListener('DOMContentLoaded', function() {
+		// Search the entire document for uses of the plugins registered plugins
+		wok.init(document.documentElement);
+	}, false);
+})();
+```
 You only have to call `init` if you have any plugins to initialize. Currently, calling `init` multiple times with the same DOM node (or parts of the same tree), will initialize the plugins multiple times, possibly leading to unexpected results. This will likely change in a future release.
 
 ### Configuration
@@ -98,18 +99,20 @@ or
 
 The following is an example of an element being set up for the `filter` plugin, using both input and output pipes.
 
-	<div data-wok-filter='data/data.filtered/{"fields": ["name", "email", "address"]},"session"'>
-	 …
-	</div>
-
+```html
+<div data-wok-filter='data/data.filtered/{"fields": ["name", "email", "address"]},"session"'>
+ …
+</div>
+```
 The filter plugin callback will be provided with connections to the input pipe “data” and the output pipe “data.filtered”, Additionally, the following arguments get passed:
 
-	element,
-	{
-		fields: ["name", "email", "address"]
-	},
-	"session"
-
+```javascript
+element,
+{
+	fields: ["name", "email", "address"]
+},
+"session"
+```
 The first argument to the function is always the DOM node on which the data attribute is defined.
 
 ## API
@@ -118,13 +121,17 @@ The first argument to the function is always the DOM node on which the data attr
 
 The most fundamental part of a Wok.js pipe is the provider, the function that listens to request on a pipe (and hopefully responds with `wok.render`). To register a provider for a pipe, use `wok.provide`:
 
-	wok.provide(pipeName, function provider(configuration…) {}, replace);
+```javascript
+wok.provide(pipeName, function provider(configuration…) {}, replace);
+```
 
 `provider` will be the function that is called whenever the configuration for this pipe changes and indicates to the source that it should call `wok.render` with updated data. Remember when I said above that each pipe can only have one source? What I actually meant was: there can only be one provider per pipe. If you want to call `wok.provide` multiple times for the same pipe in order to replace the previous provider, set the `replace` argument to `true`.
 
 To register a function that displays data, use `wok.subscribe`:
 
-	wok.subscribe(pipeName, function subscriber(data…) {});
+```javascript
+wok.subscribe(pipeName, function subscriber(data…) {});
+```
 
 Whenever a pipe gets rendered, the `subscriber` gets called with the updated data. The idea is for the subscriber to either display the data or pass a modified version on to a different pipe.
 
@@ -132,11 +139,15 @@ As you might have noticed, both provider and subscriber can accept multiple argu
 
 To actually request new data from the provider, call `wok.request`:
 
-	wok.request(pipeName, configuration…);
+```javascript
+wok.request(pipeName, configuration…);
+```
 
 When the provider has processed the request and is ready with the configured data, it needs to call `wok.render`:
 
-	wok.render(pipeName, data…);
+```javascript
+wok.render(pipeName, data…);
+```
 
 This then gets passed to all subscribers.
 
@@ -144,86 +155,101 @@ This then gets passed to all subscribers.
 
 Unifying these concepts of subscribers and providers is the “stage”. A stage has at least and input or an output pipe but can have both. calling `wok.register` is a means of making sure you are set up with the correct callbacks:
 
-	wok.register({
-		input: [pipeName, subscriber],
-		output: [pipeName, provider]
-	});
+```javascript
+wok.register({
+	input: [pipeName, subscriber],
+	output: [pipeName, provider]
+});
+```
 
 This will return an object (the “stage”) with the following properties:
 
-	{
-		wok,      // The Wok.js instance
-		request,  // Call this to request data from the input pipe, optionally passing configuration options
-		render    // Render data to the output pipe
-	}
+```javascript
+{
+	wok,      // The Wok.js instance
+	request,  // Call this to request data from the input pipe, optionally passing configuration options
+	render    // Render data to the output pipe
+}
+```
 
 ### High-level API: Writing plugins with `use`
 
 Like I said earlier: plugins are a means of unifying the concepts of pipes with the DOM. To register a plugin, use `wok.use`:
 
-	wok.use(pluginName, function plugin(element, options…) {});
+```javascript
+wok.use(pluginName, function plugin(element, options…) {});
+```
 
 The `plugin` function is at the heart of this: it gets invoked with the `this` object pointing to the stage that is configured using the pipe names found in the DOM element’s data-attribute “data-wok-pluginName” (where the “wok-” prefix is configurable) and must return an object with callbacks:
 
-	{
-		request: function request(configuration…),  // If the plugin has an output pipe, this callback should provide the data for it
-		render: function render(data…)              // If the plugin has an input pipe, this callback should render the data on it
-	}
-
+```javascript
+{
+	request: function request(configuration…),  // If the plugin has an output pipe, this callback should provide the data for it
+	render: function render(data…)              // If the plugin has an input pipe, this callback should render the data on it
+}
+```
 Either `render` (or `request`) can be omitted, making this plugin input-only (or output-only). If the plugin only has one pipe, the unused property can also be set to a boolean to request or render the pipe as soon as possible (but without any data or configuration). This is mostly used from the bottom up so that input-only plugins add `request: true` to this object in order to get data as soon as the Wok.js instance is ready.
 
 Let’s show an example plugin that dumps the data on a pipe into a DOM element:
 
-	wok.use('debug', function debug(element, separator) {
-		// Set up options
-		separator = separator || "\n";
-		// Set up the element
-		element.style.whiteSpace = 'pre';
-		element.textContent = '';
-		// Store the controls in a variable
-		var controls = this;
+```javascript
+wok.use('debug', function debug(element, separator) {
+	// Set up options
+	separator = separator || "\n";
+	// Set up the element
+	element.style.whiteSpace = 'pre';
+	element.textContent = '';
+	// Store the controls in a variable
+	var controls = this;
 
-		function render(data) {
-			element.textContent += separator+JSON.stringify(data);
+	function render(data) {
+		element.textContent += separator+JSON.stringify(data);
+	}
+	
+	element.addEventListener('keypress', function(event) {
+		if(event.charCode === 0) {
+			return;
 		}
-		
-		element.addEventListener('keypress', function(event) {
-			if(event.charCode === 0) {
-				return;
-			}
-			// Request from the source.
-			// Remember, the format of the configuration is up to the implementation.
-			// For this example, we simply chose two parameters.
-			// The pipe’s provider will have to support this format.
-			controls.request('character', String.fromCharCode(event.charCode));
-			// Do not insert the typed character
-			event.preventDefault();
-		}, false);
+		// Request from the source.
+		// Remember, the format of the configuration is up to the implementation.
+		// For this example, we simply chose two parameters.
+		// The pipe’s provider will have to support this format.
+		controls.request('character', String.fromCharCode(event.charCode));
+		// Do not insert the typed character
+		event.preventDefault();
+	}, false);
 
-		return {
-			render: render
-		}
-	});
+	return {
+		render: render
+	}
+});
+```
 
 You can now use this plugin as follows:
 
-	<textarea data-wok-debug='inputPipeName//"\n-------------\n"'>
-	</textarea>
+```html
+<textarea data-wok-debug='inputPipeName//"\n-------------\n"'>
+</textarea>
+```
 
 Which will configure the separator to be `"\n-------------\n"`.
 
 Alternatively, plugins can be assigned to the global `Wok.plugins` object and then registered using just their name only. This is the way third-party plugins are registered:
 
-	Wok.plugins.debug = function debug(element, separator) {};
-	…
-	wok = new Wok();
-	wok.use("debug"); // Same as wok.use("debug, Wok.plugins.debug);
-	wok.init();
+```javascript
+Wok.plugins.debug = function debug(element, separator) {};
+…
+wok = new Wok();
+wok.use("debug"); // Same as wok.use("debug, Wok.plugins.debug);
+wok.init();
+```
 
 To alias an existing plugin, use two strings. This way, the same plugin can be used multiple times on the same element (or using a nicer name):
 
-	wok.use("test", function() …);
-	wok.use("test2", "test");
+```javascript
+wok.use("test", function() …);
+wok.use("test2", "test");
+```
 
 ## Installation
 

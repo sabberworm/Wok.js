@@ -262,7 +262,7 @@ Install via npm:
 
 Prerequisites:
 
-	gulp install -g gulp
+	npm install -g gulp
 	npm install
 
 Minify into `dist/`:

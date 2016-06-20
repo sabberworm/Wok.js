@@ -5,6 +5,7 @@ node_js:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  - export CHROME_BIN=chromium-browser
 env:
   - KARMA_BROWSER=Firefox
-  - KARMA_BROWSER=PhantomJS
+  - KARMA_BROWSER=Chrome_travis_ci
